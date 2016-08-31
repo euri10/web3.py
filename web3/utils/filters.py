@@ -14,6 +14,7 @@ from .abi import (
     abi_to_signature,
 )
 
+
 def decodelogs(event_abi, log):
     event_non_indexed_args = exclude_indexed_event_inputs(event_abi)
     #data_decoded = abi_serialize(event_non_indexed_args)

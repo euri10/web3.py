@@ -1,7 +1,10 @@
 import random
 import gevent
 from flaky import flaky
-from web3.utils.filters import decodelogs
+from web3.utils.filters import (
+    decodelogs
+)
+
 
 @flaky(max_runs=3)
 def test_on_filter_with_only_event_name(web3_empty,
