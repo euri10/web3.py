@@ -1,7 +1,7 @@
 import random
 import gevent
 from flaky import flaky
-
+from web3.utils.filters import decodelogs
 
 @flaky(max_runs=3)
 def test_on_filter_with_only_event_name(web3_empty,
@@ -26,7 +26,8 @@ def test_on_filter_with_only_event_name(web3_empty,
 
     assert len(seen_logs) == 1
     assert seen_logs[0]['transactionHash'] == txn_hash
-
+    print(seen_logs)
+    assert decodelogs(EMITTER_ABI, seen_logs[0]) == (0, emitter_log_topics.LogNoArguments, 0 )
 
 @flaky(max_runs=3)
 def test_on_filter_with_event_name_and_single_argument(web3_empty,

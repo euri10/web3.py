@@ -9,7 +9,19 @@ from .types import (
 from .abi import (
     construct_event_topic_set,
     construct_event_data_set,
+    exclude_indexed_event_inputs,
+    get_indexed_event_inputs,
+    abi_to_signature,
 )
+
+def decodelogs(event_abi, log):
+    event_non_indexed_args = exclude_indexed_event_inputs(event_abi)
+    #data_decoded = abi_serialize(event_non_indexed_args)
+    data_decoded = 0
+    event_signature = abi_to_signature(event_abi)
+    topics0_decoded = force_bytes("0x" + sha3_256(force_bytes(event_signature)).hexdigest())
+    topicsN_decoded = 0
+    return data_decoded, topics0_decoded, topicsN_decoded
 
 
 def construct_event_filter_params(event_abi,
