@@ -10,17 +10,36 @@ from .abi import (
     construct_event_topic_set,
     construct_event_data_set,
     exclude_indexed_event_inputs,
+    exclude_indexed_event_inputs_types,
     get_indexed_event_inputs,
+    get_indexed_event_inputs_types,
     abi_to_signature,
 )
+from web3.utils.string import force_bytes
+from web3.utils.encoding import decode_hex, remove_0x_prefix
+
+from sha3 import sha3_256
+from ethereum.abi import decode_abi
 
 
 def decodelogs(event_abi, log):
     event_non_indexed_args = exclude_indexed_event_inputs(event_abi)
-    #data_decoded = abi_serialize(event_non_indexed_args)
-    data_decoded = 0
+    print('{} | {} | {}'.format(len(event_non_indexed_args), type(event_non_indexed_args), event_non_indexed_args))
+   
+    # see http://ethereum.stackexchange.com/questions/6297/python-eth-getfilterchanges-data-how-to-decode  
+
+    print('=============================')
+    print(log['data'])
+    print(exclude_indexed_event_inputs_types(event_abi))
+    print(decode_hex(remove_0x_prefix(log['data'])))
+    data_decoded = decode_abi(exclude_indexed_event_inputs_types(event_abi), decode_hex(remove_0x_prefix(log['data'])))
+    print(data_decoded)
+    print('=============================')
     event_signature = abi_to_signature(event_abi)
     topics0_decoded = force_bytes("0x" + sha3_256(force_bytes(event_signature)).hexdigest())
+    event_indexed_args = get_indexed_event_inputs(event_abi)
+    print('{} | {} | {}'.format(len(event_indexed_args), type(event_indexed_args), event_indexed_args))
+
     topicsN_decoded = 0
     return data_decoded, topics0_decoded, topicsN_decoded
 

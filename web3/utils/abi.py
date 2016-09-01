@@ -46,12 +46,16 @@ def get_abi_input_names(abi):
 
 
 def get_indexed_event_inputs(event_abi):
-    return [arg for arg in event_abi['inputs'] if arg['indexed'] is True]
+    return [arg for arg in event_abi['inputs'] if arg['indexed']]
 
+def get_indexed_event_inputs_types(event_abi):
+    return [arg['type'] for arg in event_abi['inputs'] if arg['indexed']]
 
 def exclude_indexed_event_inputs(event_abi):
-    return [arg for arg in event_abi['inputs'] if arg['indexed'] is False]
+    return [arg for arg in event_abi['inputs'] if not arg['indexed']]
 
+def exclude_indexed_event_inputs_types(event_abi):
+    return [arg['type'] for arg in event_abi['inputs'] if not arg['indexed']]
 
 def filter_by_argument_count(arguments, contract_abi):
     return [
